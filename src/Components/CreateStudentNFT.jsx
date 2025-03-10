@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useWalletKit } from '@mysten/wallet-kit'; // Correct usage
+import { useWalletKit } from '@mysten/wallet-kit';
+import { TransactionBlock } from '@mysten/sui.js/transactions'; // Correct import path
 
 const CreateStudentNFT = () => {
-  const { signAndExecuteTransactionBlock } = useWalletKit(); // Hook is used correctly
+  const { signAndExecuteTransactionBlock } = useWalletKit();
   const [studentId, setStudentId] = useState('');
 
   const handleCreateNFT = async () => {
     const tx = new TransactionBlock();
     tx.moveCall({
-      target: `0xcc5795a7a7e5a1f7947285ebb151c78d92da10197525103161980d4e32186cc8::university::election::create_student_voting_nft`,
+      target: `0xYOUR_PACKAGE_ID::university::election::create_student_voting_nft`,
       arguments: [tx.pure.u64(studentId)],
     });
 

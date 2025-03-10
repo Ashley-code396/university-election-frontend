@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
 
 const ViewResults = () => {
   const [results, setResults] = useState([]);
@@ -19,11 +19,11 @@ const ViewResults = () => {
   }, []);
 
   return (
-    <div className="p-4 border rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Election Results</h2>
+    <div className="card">
+      <h2>Election Results</h2>
       <ul>
         {results.map((result, index) => (
-          <li key={index} className="mb-2">
+          <li key={index}>
             <span className="font-semibold">Candidate ID:</span> {result.candidate_id},{' '}
             <span className="font-semibold">Votes:</span> {result.total_votes}
           </li>
