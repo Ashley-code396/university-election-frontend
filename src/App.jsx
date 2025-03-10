@@ -1,18 +1,16 @@
 import React from 'react';
-import { WalletKitProvider } from '@mysten/wallet-kit'; // Updated import
-import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
-import CreateStudentNFT from './components/CreateStudentNFT';
-import CastVote from './components/CastVote';
-import ViewResults from './components/ViewResults';
-
-// Create a Sui client
-const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
+import { WalletKitProvider, ConnectButton } from '@mysten/wallet-kit'; // Import ConnectButton
+import './index.css';
+import CreateStudentNFT from './Components/CreateStudentNFT';
+import CastVote from './Components/CastVote';
+import ViewResults from './Components/ViewResults';
 
 function App() {
   return (
     <WalletKitProvider>
       <div className="App">
         <h1>University Election</h1>
+        <ConnectButton /> {/* Add a wallet connection button */}
         <CreateStudentNFT />
         <CastVote />
         <ViewResults />
