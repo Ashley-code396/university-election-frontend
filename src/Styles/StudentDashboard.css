@@ -1,0 +1,198 @@
+/* General Styling */
+body {
+    background-color: #f0f2f5; /* Light gray background for the page */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar */
+/* Navbar */
+.navbar {
+    background-color: #008080; /* Blue color */
+    padding: 20px;
+    width: 100%; /* Full width */
+    position: fixed; /* Fixed at the top */
+    top: 0; /* Position at the top */
+    left: 0; /* Align to the left */
+    z-index: 1000; /* Ensure it stays above other content */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-start; /* Align links to the left */
+    gap: 0.1cm; /* 2cm gap between links */
+    padding-left: 20px; /* Add some padding from the left edge */
+}
+
+.navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px; /* Adjust padding as needed */
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+.disconnect-button-container {
+    position: fixed; /* Fix the button container */
+    top: 70px; /* Position below the navbar */
+    right: 10px; /* Align to the right */
+    z-index: 1000; /* Ensure it stays above other content */
+}
+
+/* Disconnect Button */
+.disconnect-button {
+    padding: 10px 20px;
+    background-color: #092e54; /* Red color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.disconnect-button:hover {
+    background-color: #437097; /* Darker red on hover */
+}
+
+
+/* Main Content Container */
+.content-container {
+    width: 90%; /* Adjust the width of the card */
+    max-width: 1000px; /* Increase the maximum width of the card */
+    margin: 120px auto 20px; /* Center the card horizontally and add space for the navbar and disconnect button */
+    padding: 20px;
+    background-color: white; /* White background for the card */
+    border-radius: 0; /* Remove rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for the card */
+    height: 70vh; /* Set a fixed height for the card */
+    overflow-y: auto; /* Enable vertical scrolling inside the card */
+}
+
+/* Custom Scrollbar Styling */
+.content-container::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.content-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the track */
+    border-radius: 4px; /* Rounded corners for the track */
+}
+
+.content-container::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+.content-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the thumb on hover */
+}
+
+/* Election Dropdown */
+.election-dropdown {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.election-dropdown label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.election-dropdown select {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+
+/* Election Card */
+/* Election Card */
+.election-card {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Election Details */
+.election-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to the left */
+    gap: 10px; /* Spacing between details */
+    margin-bottom: 30px; /* Increased spacing before the black line */
+}
+
+.election-details h2 {
+    color: #555;
+    margin: 0; /* Remove default margin */
+    font-size: 18px; /* Adjust as needed */
+}
+
+.election-details p {
+    color: #666;
+    margin: 0; /* Remove default margin */
+    font-size: 14px; /* Match the size of candidate details */
+}
+
+/* Black Line Separator */
+.black-line {
+    border: 1px solid #000;
+    margin: 30px 0; /* Increased spacing before and after the black line */
+}
+
+/* Candidates List */
+/* Candidates List */
+.candidates-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px; /* Increase horizontal spacing */
+    row-gap: 150px; /* Increase vertical spacing */
+}
+
+.candidate-item {
+    display: flex;
+    align-items: flex-start; /* Align items to the top */
+    gap: 20px; /* Space between avatar and details */
+}
+
+.candidate-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Circular avatar */
+    object-fit: cover; /* Ensure the image fits well */
+    flex-shrink: 0; /* Prevent the avatar from shrinking */
+}
+
+.candidate-details {
+    flex: 1; /* Allow the details to take up remaining space */
+    display: flex;
+    flex-direction: column; /* Stack details vertically */
+    align-items: flex-start; /* Align text to the left */
+}
+
+/* Candidate Details */
+.candidate-details h4 {
+    margin: 0;
+    font-size: 14px; /* Match the size of other details */
+    color: #333;
+}
+
+.candidate-details p {
+    margin: 5px 0;
+    font-size: 14px; /* Size of age and qualification */
+    color: #666;
+}

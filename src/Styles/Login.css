@@ -1,0 +1,66 @@
+/* Ensure full viewport height without scrollbars */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents scrolling */
+    height: 100%;
+    width: 100%;
+}
+
+/* Ensure the login container takes up the entire screen */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    font-family: Arial, sans-serif;
+    position: relative;
+    background: url("../assets/bg-image.jpg") no-repeat center center;
+    background-size: cover;
+}
+
+/* Fix dark overlay so it covers entire screen properly */
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3); /* Adjust opacity for visibility */
+    backdrop-filter: blur(2px);
+}
+
+/* Ensure text and button are above the overlay */
+.welcome-message, .login-button {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+/* Button Styling */
+.login-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px; 
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+/* Additional style for the disconnect button */
+.disconnect-button {
+    background-color: #dc3545; /* Red color for disconnect button */
+}
+
+.disconnect-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
