@@ -10,7 +10,7 @@ const Login = () => {
     // List of admin addresses
     const adminAddresses = [
         "0xAdminAddress1", // Address of the first admin account
-        //"0x606dd47ffc9a798e889efd392df8fe6a1e92cc61383249de79ffaafc4254700c", // Address of the second admin account
+        "0x606dd47ffc9a798e889efd392df8fe6a1e92cc61383249de79ffaafc4254700c", // Address of the second admin account
         // Add more admin addresses as needed
     ];
 

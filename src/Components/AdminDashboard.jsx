@@ -3,6 +3,7 @@ import { useWalletKit } from "@mysten/wallet-kit";
 import { useNavigate } from "react-router-dom";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
+//import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
     const { currentAccount, disconnect } = useWalletKit();
@@ -12,21 +13,29 @@ const AdminDashboard = () => {
     const [electionResults, setElectionResults] = useState([]);
     const suiClient = new SuiClient({ url: getFullnodeUrl("testnet") });
 
+    // Replace these with your actual Object IDs
+    const PACKAGE_ID = "0xdd0428e65ff4967f3b13e14666717a213680d4859b25c6ab77e1a29b75a01429";
+    const CANDIDATE_OBJECT_ID = "0x<CANDIDATE_OBJECT_ID>";
+    const VOTER_OBJECT_ID = "0x<VOTER_OBJECT_ID>";
+    const ELECTION_RESULT_OBJECT_ID = "0x<ELECTION_RESULT_OBJECT_ID>";
+
     // Fetch candidates, voters, and election results on component mount
     useEffect(() => {
-        fetchCandidates();
-        fetchVoters();
-        fetchElectionResults();
-    }, []);
+        if (currentAccount) {
+            fetchCandidates();
+            fetchVoters();
+            fetchElectionResults();
+        }
+    }, [currentAccount]);
 
     // Fetch candidates from the blockchain
     const fetchCandidates = async () => {
         try {
             const candidates = await suiClient.getObject({
-                id: "<CANDIDATE_OBJECT_ID>", // Replace with the actual object ID
+                id: CANDIDATE_OBJECT_ID,
                 options: { showContent: true },
             });
-            setCandidates(candidates.data.content.fields);
+            setCandidates(candidates.data.content.fields.candidates);
         } catch (error) {
             console.error("Error fetching candidates:", error);
         }
@@ -36,10 +45,10 @@ const AdminDashboard = () => {
     const fetchVoters = async () => {
         try {
             const voters = await suiClient.getObject({
-                id: "<VOTER_OBJECT_ID>", // Replace with the actual object ID
+                id: VOTER_OBJECT_ID,
                 options: { showContent: true },
             });
-            setVoters(voters.data.content.fields);
+            setVoters(voters.data.content.fields.voters);
         } catch (error) {
             console.error("Error fetching voters:", error);
         }
@@ -49,10 +58,10 @@ const AdminDashboard = () => {
     const fetchElectionResults = async () => {
         try {
             const results = await suiClient.getObject({
-                id: "<ELECTION_RESULT_OBJECT_ID>", // Replace with the actual object ID
+                id: ELECTION_RESULT_OBJECT_ID,
                 options: { showContent: true },
             });
-            setElectionResults(results.data.content.fields);
+            setElectionResults(results.data.content.fields.results);
         } catch (error) {
             console.error("Error fetching election results:", error);
         }
@@ -62,8 +71,8 @@ const AdminDashboard = () => {
     const graduateStudent = async (studentId) => {
         const tx = new TransactionBlock();
         tx.moveCall({
-            target: "university::election::graduate_student",
-            arguments: [tx.object("<VOTER_NFT_OBJECT_ID>")], // Replace with the actual object ID
+            target: `${PACKAGE_ID}::election::graduate_student`,
+            arguments: [tx.object(VOTER_OBJECT_ID)],
         });
 
         try {
@@ -82,8 +91,8 @@ const AdminDashboard = () => {
     const updateVotingPower = async (studentId, newVotingPower) => {
         const tx = new TransactionBlock();
         tx.moveCall({
-            target: "university::election::update_voting_power",
-            arguments: [tx.object("<VOTER_NFT_OBJECT_ID>"), tx.pure(newVotingPower)],
+            target: `${PACKAGE_ID}::election::update_voting_power`,
+            arguments: [tx.object(VOTER_OBJECT_ID), tx.pure(newVotingPower)],
         });
 
         try {
@@ -105,56 +114,79 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="admin-dashboard">
-            <h1>Admin Dashboard</h1>
-            <p>Welcome, Admin! You can manage candidates and election results here.</p>
-
-            {/* Candidates Section */}
-            <section>
-                <h2>Candidates</h2>
+        <div className="content-container">
+            {/* Navbar */}
+            <div className="navbar">
                 <ul>
-                    {candidates.map((candidate) => (
-                        <li key={candidate.student_id}>
-                            <strong>{candidate.name}</strong> - Votes: {candidate.vote_count}
-                        </li>
-                    ))}
+                    <li><a href="/admin-dashboard">Admin Dashboard</a></li>
+                    <li><a href="/manage-candidates">Manage Candidates</a></li>
+                    <li><a href="/manage-voters">Manage Voters</a></li>
                 </ul>
-            </section>
-
-            {/* Voters Section */}
-            <section>
-                <h2>Voters</h2>
-                <ul>
-                    {voters.map((voter) => (
-                        <li key={voter.student_id}>
-                            <strong>{voter.name}</strong> - Voting Power: {voter.voting_power}
-                            <button onClick={() => graduateStudent(voter.student_id)}>
-                                Mark as Graduated
-                            </button>
-                            <button onClick={() => updateVotingPower(voter.student_id, voter.voting_power + 1)}>
-                                Increase Voting Power
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            {/* Election Results Section */}
-            <section>
-                <h2>Election Results</h2>
-                <ul>
-                    {electionResults.map((result) => (
-                        <li key={result.candidate_id}>
-                            <strong>Candidate {result.candidate_id}</strong> - Total Votes: {result.total_votes}
-                        </li>
-                    ))}
-                </ul>
-            </section>
+            </div>
 
             {/* Disconnect Button */}
-            <button onClick={handleDisconnect} className="disconnect-button">
-                Disconnect Wallet
-            </button>
+            <div className="disconnect-button-container">
+                <button onClick={handleDisconnect} className="disconnect-button">
+                    Disconnect Wallet
+                </button>
+            </div>
+
+            {/* Main Content */}
+            <div className="election-card">
+                <h1>Admin Dashboard</h1>
+                <p>Welcome, Admin! You can manage candidates and election results here.</p>
+
+                {/* Candidates Section */}
+                <section className="election-details">
+                    <h2>Candidates</h2>
+                    <ul className="candidates-list">
+                        {candidates.map((candidate) => (
+                            <li key={candidate.student_id} className="candidate-item">
+                                <div className="candidate-details">
+                                    <h4>{candidate.name}</h4>
+                                    <p>Votes: {candidate.vote_count}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+
+                {/* Voters Section */}
+                <section className="election-details">
+                    <h2>Voters</h2>
+                    <ul className="candidates-list">
+                        {voters.map((voter) => (
+                            <li key={voter.student_id} className="candidate-item">
+                                <div className="candidate-details">
+                                    <h4>{voter.name}</h4>
+                                    <p>Voting Power: {voter.voting_power}</p>
+                                    <button onClick={() => graduateStudent(voter.student_id)}>
+                                        Mark as Graduated
+                                    </button>
+                                    <button onClick={() => updateVotingPower(voter.student_id, voter.voting_power + 1)}>
+                                        Increase Voting Power
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+
+                {/* Election Results Section */}
+                <section className="election-details">
+                    <h2>Election Results</h2>
+                    <ul className="candidates-list">
+                        {electionResults.map((result) => (
+                            <li key={result.candidate_id} className="candidate-item">
+                                <div className="candidate-details">
+                                    <h4>Candidate {result.candidate_id}</h4>
+                                    <p>Total Votes: {result.total_votes}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            </div>
         </div>
     );
 };
