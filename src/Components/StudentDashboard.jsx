@@ -6,21 +6,21 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import "../Styles/StudentDashboard.css";
 
 const StudentDashboard = () => {
-    const { currentAccount, disconnect } = useWalletKit();
+    const { currentAccount, disconnect, signTransactionBlock } = useWalletKit();
     const navigate = useNavigate();
     const [selectedElection, setSelectedElection] = useState("");
     const [elections, setElections] = useState([]);
     const [candidates, setCandidates] = useState([]);
     const [voterNFT, setVoterNFT] = useState(null);
-    const suiClient = new SuiClient({ url: getFullnodeUrl("testnet") });
+    const suiClient = new SuiClient({ url: getFullnodeUrl("devnet") });
 
     // Replace these with your actual Package ID and Object IDs
-    const PACKAGE_ID = "0xdd0428e65ff4967f3b13e14666717a213680d4859b25c6ab77e1a29b75a01429";
+    const PACKAGE_ID = "0x2ef60b66cced926e4e2b32f94d31e2e760fa78115b8722640a9b4d73043b62b9";
     const ELECTION_OBJECT_ID = "0x<ELECTION_OBJECT_ID>";
     const CANDIDATE_OBJECT_ID = "0x<CANDIDATE_OBJECT_ID>";
     const VOTER_NFT_OBJECT_ID = "0x<VOTER_NFT_OBJECT_ID>";
 
-    // Fetch elections and candidates on component mount
+    // Fetch elections, candidates, and voter NFT on component mount
     useEffect(() => {
         if (currentAccount) {
             fetchElections();
@@ -70,6 +70,11 @@ const StudentDashboard = () => {
 
     // Mint a Voter NFT
     const mintVoterNFT = async () => {
+        if (!currentAccount || !currentAccount.address) {
+            console.error("No wallet connected or address not found.");
+            return;
+        }
+
         const tx = new TransactionBlock();
         tx.moveCall({
             target: `${PACKAGE_ID}::election::create_student_voting_nft`,
@@ -77,14 +82,17 @@ const StudentDashboard = () => {
         });
 
         try {
-            await suiClient.signAndExecuteTransactionBlock({
-                transactionBlock: tx,
-                signer: currentAccount,
+            const signedTx = await signTransactionBlock({ transactionBlock: tx });
+            const result = await suiClient.executeTransactionBlock({
+                transactionBlock: signedTx.transactionBlockBytes,
+                signature: signedTx.signature,
             });
+            console.log("Transaction Result:", result);
             alert("Voter NFT minted successfully!");
             fetchVoterNFT(); // Refresh Voter NFT data
         } catch (error) {
             console.error("Error minting Voter NFT:", error);
+            alert("Failed to mint Voter NFT. Check the console for more details.");
         }
     };
 
@@ -92,15 +100,17 @@ const StudentDashboard = () => {
     const registerCandidate = async (name, campaignPromises) => {
         const tx = new TransactionBlock();
         tx.moveCall({
-            target: `${PACKAGE_ID}::election::register_candidate`,
+            target: `${PACKAGE_ID}::university::election::register_candidate`,
             arguments: [tx.object(VOTER_NFT_OBJECT_ID), tx.pure(name), tx.pure(campaignPromises)],
         });
 
         try {
-            await suiClient.signAndExecuteTransactionBlock({
-                transactionBlock: tx,
-                signer: currentAccount,
+            const signedTx = await signTransactionBlock({ transactionBlock: tx });
+            const result = await suiClient.executeTransactionBlock({
+                transactionBlock: signedTx.transactionBlockBytes,
+                signature: signedTx.signature,
             });
+            console.log("Transaction Result:", result);
             alert("Candidate registered successfully!");
             fetchCandidates(); // Refresh candidate list
         } catch (error) {
@@ -112,15 +122,17 @@ const StudentDashboard = () => {
     const castVote = async (candidateId) => {
         const tx = new TransactionBlock();
         tx.moveCall({
-            target: `${PACKAGE_ID}::election::cast_vote`,
+            target: `${PACKAGE_ID}::university::election::cast_vote`,
             arguments: [tx.object(VOTER_NFT_OBJECT_ID), tx.object(candidateId)],
         });
 
         try {
-            await suiClient.signAndExecuteTransactionBlock({
-                transactionBlock: tx,
-                signer: currentAccount,
+            const signedTx = await signTransactionBlock({ transactionBlock: tx });
+            const result = await suiClient.executeTransactionBlock({
+                transactionBlock: signedTx.transactionBlockBytes,
+                signature: signedTx.signature,
             });
+            console.log("Transaction Result:", result);
             alert("Vote cast successfully!");
             fetchCandidates(); // Refresh candidate list
         } catch (error) {

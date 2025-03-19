@@ -33,7 +33,7 @@ const Login = () => {
     return (
         <div className="login-container">
             <div className="background-overlay"></div> {/* Overlay for contrast */}
-            <h1 className="welcome-message">Welcome to Decentralized Voting Application</h1>
+            <h1 className="welcome-message">Welcome To The Voting Hub</h1>
             {currentAccount ? (
                 // Show "Disconnect Wallet" button if wallet is connected
                 <button

@@ -3,7 +3,7 @@ import { useWalletKit } from "@mysten/wallet-kit";
 import { useNavigate } from "react-router-dom";
 import { getFullnodeUrl, SuiClient } from "@mysten/sui.js/client";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
-//import "./AdminDashboard.css";
+
 
 const AdminDashboard = () => {
     const { currentAccount, disconnect } = useWalletKit();
@@ -11,10 +11,10 @@ const AdminDashboard = () => {
     const [candidates, setCandidates] = useState([]);
     const [voters, setVoters] = useState([]);
     const [electionResults, setElectionResults] = useState([]);
-    const suiClient = new SuiClient({ url: getFullnodeUrl("testnet") });
+    const suiClient = new SuiClient({ url: getFullnodeUrl("devnet") });
 
     // Replace these with your actual Object IDs
-    const PACKAGE_ID = "0xdd0428e65ff4967f3b13e14666717a213680d4859b25c6ab77e1a29b75a01429";
+    const PACKAGE_ID = "0x2ef60b66cced926e4e2b32f94d31e2e760fa78115b8722640a9b4d73043b62b9";
     const CANDIDATE_OBJECT_ID = "0x<CANDIDATE_OBJECT_ID>";
     const VOTER_OBJECT_ID = "0x<VOTER_OBJECT_ID>";
     const ELECTION_RESULT_OBJECT_ID = "0x<ELECTION_RESULT_OBJECT_ID>";
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
         }
     };
 
-    // Function to update voting power
+    // Function to update voting power-supposed to be dynamic though based on the smart contract
     const updateVotingPower = async (studentId, newVotingPower) => {
         const tx = new TransactionBlock();
         tx.moveCall({
